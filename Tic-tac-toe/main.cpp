@@ -1,12 +1,18 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <bits/stdc++.h>
+
+
+
 
 using namespace std;
 
 using bord_t=string;
 
 enum class GameStatus {X_Wins,O_Wins,Draw,Ongoing};
+
+unordered_map<bord_t,double> value_table;
 
 GameStatus getWinner(const bord_t& bord)
 {
@@ -39,6 +45,31 @@ GameStatus getWinner(const bord_t& bord)
 
 }
 
+double get_value(unordered_map<bord_t,double>& value_table,const bord_t& bord)
+{
+    
+    if (value_table.find(bord)==value_table.end())
+    {
+        GameStatus status = getWinner(bord);
+        if (status == GameStatus::X_Wins)
+        {
+            value_table[bord] = 1.0;
+        }
+        else if (status == GameStatus::O_Wins || status == GameStatus::Draw)
+        {
+            value_table[bord] = 0.0;
+        }
+        else
+        {
+            value_table[bord] = 0.5;
+        }
+    }
+
+    return value_table[bord];
+}
+
+
+
 bord_t initial_board()
 {
     return "         ";
@@ -59,5 +90,7 @@ string aplly_board_move(const bord_t& board,int i, char player){
 
 int main()
 {
-
+    double test =get_value(value_table,"XXX      ");
+    
+    cout<<"The output is "<<test<<endl;
 }
